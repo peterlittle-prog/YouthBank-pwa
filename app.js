@@ -1,4 +1,5 @@
-const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
+const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec
+";
 
 document.addEventListener('DOMContentLoaded', () => {
   fetch(API_URL)
