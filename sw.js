@@ -1,13 +1,12 @@
 const CACHE_NAME = 'youthbank-sessions-v2'; // Note: I incremented the version number
 const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1Qszh5eT6ixw6kQ5TmfR7QCiT3_NA304KQIBz06R40Pq_I3aJn/exec";
 const urlsToCache = [
-  '/',
-  '/YouthBank-pwa/', // Add this line for the root of the GitHub Pages site
+  '/YouthBank-pwa/',
   '/YouthBank-pwa/index.html',
   '/YouthBank-pwa/style.css',
   '/YouthBank-pwa/app.js',
   '/YouthBank-pwa/manifest.json',
-  API_URL
+  API_URL // This one is already a full URL, so it's fine
 ];
 
 // Install the service worker and cache assets
