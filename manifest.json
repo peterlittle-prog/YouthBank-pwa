@@ -1,7 +1,7 @@
 {
   "name": "YouthBank Sessions",
   "short_name": "YouthBank",
-  "start_url": ".",
+  "start_url": "/YouthBank-pwa/",
   "display": "standalone",
   "background_color": "#fff",
   "description": "Offline-first session plans for YouthBank.",
