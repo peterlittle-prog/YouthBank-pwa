@@ -5,8 +5,8 @@
   "display": "standalone",
   "background_color": "#fff",
   "description": "Offline-first session plans for YouthBank.",
-  "icons": [
-    { "src": "icon-192.png", "type": "image/png", "sizes": "192x192" },
-    { "src": "icon-512.png", "type": "image/png", "sizes": "512x512" }
-  ]
+"icons": [
+  { "src": "/YouthBank-pwa/icon-192.png", "type": "image/png", "sizes": "192x192" },
+  { "src": "/YouthBank-pwa/icon-512.png", "type": "image/png", "sizes": "512x512" }
+]
 }
