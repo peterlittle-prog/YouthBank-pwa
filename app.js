@@ -10,3 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add event listener for the form to handle POST requests
 });
+// Register the service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/YouthBank-pwa/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+  });
+}
