@@ -4,15 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-  // --- THIS IS THE NEW FETCH CODE ---
-  // We are now using 'POST' to bypass the CORS issue.
+  // --- THIS IS THE FINAL FETCH CODE ---
   fetch(API_URL, {
     method: 'POST',
-    redirect: "follow",
+    // We have REMOVED the 'redirect: "follow"' line.
+    // The default behavior is what we need.
     headers: {
-      "Content-Type": "text/plain;charset=utf-8", // Required for Apps Script POST
+      "Content-Type": "text/plain;charset=utf-8",
     },
-    body: JSON.stringify({action: 'getSessions'}) // We send a simple instruction
+    body: JSON.stringify({action: 'getSessions'})
   })
     .then(response => {
       if (!response.ok) {
