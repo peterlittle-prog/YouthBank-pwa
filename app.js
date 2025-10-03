@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Set its source to the API URL, with a special callback parameter
   // IMPORTANT: Use your LATEST deployment URL here.
-  script.src = "YOUR_LATEST_APPS_SCRIPT_URL?callback=displaySessions";
+  script.src = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec?callback=displaySessions";
   
   // Add the script to the page, which will execute the request
   document.body.appendChild(script);
