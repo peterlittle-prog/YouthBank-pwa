@@ -1,14 +1,13 @@
-const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec";
+const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1Qszh5eT6ixw6kQ5TmfR7QCiT3_NA304KQIBz06R40Pq_I3aJn/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-  // --- THIS IS THE FINAL FETCH CODE ---
   fetch(API_URL, {
     method: 'POST',
-    // We have REMOVED the 'redirect: "follow"' line.
-    // The default behavior is what we need.
+    // *** THIS IS THE NEW, CRUCIAL LINE ***
+    credentials: 'include', // Tell the browser to send cookies with this cross-domain request.
     headers: {
       "Content-Type": "text/plain;charset=utf-8",
     },
