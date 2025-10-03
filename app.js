@@ -1,55 +1,54 @@
-const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1Qszh5eT6ixw6kQ5TmfR7QCiT3_NA304KQIBz06R40Pq_I3aJn/exec";
+// A global function that the server will call by name
+function displaySessions(data) {
+  const sessionList = document.getElementById('session-list');
+  sessionList.innerHTML = ''; // Clear the loading message
+
+  if (Array.isArray(data) && data.length > 0) {
+    data.forEach(session => {
+      const sessionDiv = document.createElement('div');
+      sessionDiv.style.border = '1px solid #ccc';
+      sessionDiv.style.padding = '1em';
+      sessionDiv.style.marginBottom = '1em';
+
+      const title = session['Exercise'] || 'No Title';
+      const rationale = session['Rationale'] || 'No rationale provided.';
+
+      sessionDiv.innerHTML = `
+        <h3>${title}</h3>
+        <p>${rationale}</p>
+      `;
+      sessionList.appendChild(sessionDiv);
+    });
+  } else {
+    // This will be triggered if the data is empty or if there was an error and 'data' is not an array
+    if (data && data.error) {
+       sessionList.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
+    } else {
+       sessionList.innerHTML = '<p>No sessions found or data is in an unexpected format.</p>';
+    }
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-  fetch(API_URL, {
-    method: 'POST',
-    // *** THIS IS THE NEW, CRUCIAL LINE ***
-    credentials: 'include', // Tell the browser to send cookies with this cross-domain request.
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8",
-    },
-    body: JSON.stringify({action: 'getSessions'})
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      sessionList.innerHTML = '';
-      if (Array.isArray(data) && data.length > 0) {
-        data.forEach(session => {
-          const sessionDiv = document.createElement('div');
-          sessionDiv.style.border = '1px solid #ccc';
-          sessionDiv.style.padding = '1em';
-          sessionDiv.style.marginBottom = '1em';
+  // --- THIS IS THE NEW JSONP CODE ---
+  // Create a new script element
+  const script = document.createElement('script');
+  
+  // Set its source to the API URL, with a special callback parameter
+  // IMPORTANT: Use your LATEST deployment URL here.
+  script.src = "YOUR_LATEST_APPS_SCRIPT_URL?callback=displaySessions";
+  
+  // Add the script to the page, which will execute the request
+  document.body.appendChild(script);
 
-          const title = session['Exercise'] || 'No Title';
-          const rationale = session['Rationale'] || 'No rationale provided.';
-
-          sessionDiv.innerHTML = `
-            <h3>${title}</h3>
-            <p>${rationale}</p>
-          `;
-          sessionList.appendChild(sessionDiv);
-        });
-      } else {
-        sessionList.innerHTML = '<p>No sessions found.</p>';
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching session data:', error);
-      sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please ensure you are logged in correctly and try a hard refresh.</p>`;
-    });
+  // Basic error handling for JSONP
+  script.onerror = () => {
+    displaySessions({ error: "Failed to load the script from the server. Please check the API URL and network connection." });
+  };
 });
 
-// The service worker code remains the same
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/YouthBank-pwa/sw.js');
-  });
-}
+// The service worker code should be updated to NOT cache the dynamic API URL
+// For now, let's keep it simple. We can re-add the service worker later.
