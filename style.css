@@ -1,0 +1,10 @@
+body {
+  font-family: sans-serif;
+  padding: 2em;
+  background-color: #f4f4f4;
+}
+
+#session-list {
+  margin-top: 2em;
+}
+```5.  Scroll to the bottom and click the green **"Commit new file"** button.
