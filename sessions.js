@@ -1,4 +1,5 @@
 const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec?callback=displaySessions";
+
 let allSessions = [];
 
 function renderExerciseList(phaseName) {
@@ -26,7 +27,18 @@ function renderExerciseList(phaseName) {
 }
 
 function renderExerciseDetail(exerciseId) {
-  // ... (The full, detailed render function from our previous steps goes here) ...
+  const exerciseDetailView = document.getElementById('exercise-detail-view');
+  const exerciseListView = document.getElementById('exercise-list-view');
+  const session = allSessions.find(s => s['Exercise number'] === exerciseId);
+  if (!session) { /* ... error handling ... */ }
+  const phaseName = session.PHASE;
+  // ... (The full, detailed render logic from our previous steps goes here) ...
+  // This includes the title, rationale, materials, time, challenge, etc.
+  // And the helper function for building resource links.
+  // ...
+  exerciseDetailView.innerHTML = `... your full detail HTML ...`;
+  exerciseListView.style.display = 'none';
+  exerciseDetailView.style.display = 'block';
 }
 
 function displaySessions(data) {
