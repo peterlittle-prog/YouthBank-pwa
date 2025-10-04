@@ -3,29 +3,78 @@ function displaySessions(data) {
   const sessionList = document.getElementById('session-list');
   sessionList.innerHTML = ''; // Clear the loading message
 
+  // Helper function to build lists of linked resources
+  const buildResourceList = (session, category, count) => {
+    let listHtml = '';
+    for (let i = 1; i <= count; i++) {
+      const text = session[category + i + 'T'];
+      const link = session[category + i];
+      if (text && link) {
+        listHtml += `<li><a href="${link}" target="_blank" rel="noopener noreferrer">${text}</a></li>`;
+      } else if (text) {
+        listHtml += `<li>${text}</li>`;
+      }
+    }
+    return listHtml ? `<h4>${category}</h4><ul>${listHtml}</ul>` : '';
+  };
+
+  if (data && data.error) {
+     sessionList.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
+     return;
+  }
+
   if (Array.isArray(data) && data.length > 0) {
     data.forEach(session => {
       const sessionDiv = document.createElement('div');
       sessionDiv.style.border = '1px solid #ccc';
-      sessionDiv.style.padding = '1em';
-      sessionDiv.style.marginBottom = '1em';
+      sessionDiv.style.padding = '1.5em';
+      sessionDiv.style.marginBottom = '1.5em';
+      sessionDiv.style.borderRadius = '8px';
+      sessionDiv.style.backgroundColor = '#ffffff'; // Default background color
 
+      // --- NEW FEATURES ---
+      // These keys now match your new, clean column headers.
       const title = session['Exercise'] || 'No Title';
-      const rationale = session['Rationale'] || 'No rationale provided.';
+      const rationale = session['Rationale'] || 'Not provided.';
+      const time = session['Time'] || 'Not specified';
+      const materials = session['Materials'] || 'Not specified.';
+      const challenge = session['The Challenge'] || '';
 
+      const bgImage = session['Phase BG'];
+      const iconUrl = session['Step IC'];
+
+      // Apply background image if it exists
+      if (bgImage) {
+        // We use a semi-transparent white overlay so text is always readable
+        sessionDiv.style.backgroundImage = `linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url(${bgImage})`;
+        sessionDiv.style.backgroundSize = 'cover';
+        sessionDiv.style.backgroundPosition = 'center';
+      }
+
+      // Create icon HTML if it exists
+      const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="Icon" style="height:1.5em; vertical-align:middle; margin-right:0.5em;">` : '';
+      
+      // Build the lists of resources, info sheets, and templates
+      const resourcesHtml = buildResourceList(session, 'Resources', 5);
+      const infoSheetsHtml = buildResourceList(session, 'Information Sheets', 5);
+      const templatesHtml = buildResourceList(session, 'Templates', 5);
+      
+      // Create the final HTML for the session card
       sessionDiv.innerHTML = `
-        <h3>${title}</h3>
+        <h2>${iconHtml}${title}</h2>
         <p>${rationale}</p>
+        <p><strong>Challenge:</strong> ${challenge}</p>
+        <hr>
+        <p><strong>Time:</strong> ${time} minutes</p>
+        <p><strong>Materials:</strong> ${materials}</p>
+        ${resourcesHtml}
+        ${infoSheetsHtml}
+        ${templatesHtml}
       `;
       sessionList.appendChild(sessionDiv);
     });
   } else {
-    // This will be triggered if the data is empty or if there was an error and 'data' is not an array
-    if (data && data.error) {
-       sessionList.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
-    } else {
-       sessionList.innerHTML = '<p>No sessions found or data is in an unexpected format.</p>';
-    }
+    sessionList.innerHTML = '<p>No sessions found.</p>';
   }
 }
 
@@ -33,22 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-  // --- THIS IS THE NEW JSONP CODE ---
-  // Create a new script element
   const script = document.createElement('script');
   
-  // Set its source to the API URL, with a special callback parameter
-  // IMPORTANT: Use your LATEST deployment URL here.
-  script.src = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec?callback=displaySessions";
+  // IMPORTANT: Make sure this is your latest, active Apps Script deployment URL
+  script.src = "YOUR_LATEST_APPS_SCRIPT_URL?callback=displaySessions";
   
-  // Add the script to the page, which will execute the request
   document.body.appendChild(script);
 
-  // Basic error handling for JSONP
   script.onerror = () => {
-    displaySessions({ error: "Failed to load the script from the server. Please check the API URL and network connection." });
+    displaySessions({ error: "Failed to load script from the server. Check URL and network." });
   };
 });
-
-// The service worker code should be updated to NOT cache the dynamic API URL
-// For now, let's keep it simple. We can re-add the service worker later.
