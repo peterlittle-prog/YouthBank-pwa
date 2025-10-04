@@ -5,51 +5,120 @@ let allSessions = [];
 function renderExerciseList(phaseName) {
   const exerciseListView = document.getElementById('exercise-list-view');
   const exerciseDetailView = document.getElementById('exercise-detail-view');
-   const sessionsInPhase = allSessions.filter(session => {
+  
+  const sessionsInPhase = allSessions.filter(session => {
     return session.PHASE && session.PHASE.toLowerCase() === phaseName.toLowerCase();
-  let html = `<h2>${phaseName}</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>`;
-  sessionsInPhase.forEach(session => {
-    const title = session.Exercise || 'No Title';
-    const rationale = session.Rationale || 'Not provided.';
-    const exerciseId = session['Exercise number'];
-    html += `
-      <div class="card-link">
-        <a href="sessions.html?exercise=${exerciseId}">
-          <h3>${title}</h3>
-          <p>${rationale.substring(0, 150)}...</p>
-          <p><em>Click to see more details</em></p>
-        </a>
-      </div>
-    `;
   });
-   }
+
+  let html = `<h2>${phaseName}</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>`;
+  
+  if (sessionsInPhase.length === 0) {
+    html += '<p>No exercises found for this phase. Please check the data in the Google Sheet.</p>';
+  } else {
+    sessionsInPhase.forEach(session => {
+      const title = session.Exercise || 'No Title';
+      const rationale = session.Rationale || 'Not provided.';
+      const exerciseId = session['Exercise number'];
+      html += `
+        <div class="card-link">
+          <a href="sessions.html?exercise=${exerciseId}">
+            <h3>${title}</h3>
+            <p>${rationale.substring(0, 150)}...</p>
+            <p><em>Click to see more details</em></p>
+          </a>
+        </div>
+      `;
+    });
+  }
+
   exerciseListView.innerHTML = html;
   exerciseListView.style.display = 'block';
   exerciseDetailView.style.display = 'none';
 }
 
 function renderExerciseDetail(exerciseId) {
-  const exerciseDetailView = document.getElementById('exercise-detail-view');
   const exerciseListView = document.getElementById('exercise-list-view');
+  const exerciseDetailView = document.getElementById('exercise-detail-view');
+  
   const session = allSessions.find(s => s['Exercise number'] === exerciseId);
-  if (!session) { /* ... error handling ... */ }
+  
+  if (!session) {
+    exerciseDetailView.innerHTML = '<h2>Exercise not found</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>';
+    exerciseListView.style.display = 'none';
+    exerciseDetailView.style.display = 'block';
+    return;
+  }
+  
+  const title = session.Exercise || 'No Title';
+  const rationale = session.Rationale || 'Not provided.';
+  const time = session.Time || 'Not specified';
+  const materials = session.Materials || 'Not specified.';
+  const challenge = session['The Challenge'] || 'Not provided.';
+  const preparation = session.Preparation || '';
+  const whatToDo = session['What to do'] || '';
   const phaseName = session.PHASE;
-  // ... (The full, detailed render logic from our previous steps goes here) ...
-  // This includes the title, rationale, materials, time, challenge, etc.
-  // And the helper function for building resource links.
-  // ...
-  exerciseDetailView.innerHTML = `... your full detail HTML ...`;
+  
+  const bgImage = session['Phase BG'];
+  const iconUrl = session['Step IC'];
+
+  const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="Icon" class="detail-icon">` : '';
+
+  const buildResourceList = (cat, count) => {
+    let listHtml = '';
+    for (let i = 1; i <= count; i++) {
+      if (session[cat + i + 'T'] && session[cat + i]) {
+        listHtml += `<li><a href="${session[cat + i]}" target="_blank">${session[cat + i + 'T']}</a></li>`;
+      }
+    }
+    return listHtml ? `<h4>${cat}</h4><ul>${listHtml}</ul>` : '';
+  };
+  
+  const resourcesHtml = buildResourceList('Resources', 5);
+  const infoSheetsHtml = buildResourceList('Information Sheets', 5);
+  const templatesHtml = buildResourceList('Templates', 5);
+
+  let html = `
+    <div class="detail-card">
+      <a href="sessions.html?phase=${encodeURIComponent(phaseName)}">&laquo; Back to ${phaseName}</a>
+      <div class="detail-header" style="background-image: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url(${bgImage})">
+        <h2>${iconHtml}${title}</h2>
+      </div>
+      <div class="detail-body">
+        <p><strong>Time:</strong> ${time} minutes</p>
+        <p><strong>Materials:</strong> ${materials}</p>
+        <hr>
+        <h3>Rationale</h3>
+        <p>${rationale}</p>
+        <h3>The Challenge</h3>
+        <p>${challenge}</p>
+        <h3>Preparation</h3>
+        <p>${preparation.replace(/\n/g, '<br>')}</p>
+        <h3>What to do</h3>
+        <p>${whatToDo.replace(/\n/g, '<br>')}</p>
+        ${resourcesHtml}
+        ${infoSheetsHtml}
+        ${templatesHtml}
+      </div>
+    </div>
+  `;
+  
+  exerciseDetailView.innerHTML = html;
   exerciseListView.style.display = 'none';
   exerciseDetailView.style.display = 'block';
 }
 
 function displaySessions(data) {
-   console.log(data);
-  if (data && data.error) { /* ... error handling ... */ }
+  if (data && data.error) {
+    document.body.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
+    return;
+  }
+  
   allSessions = data;
+  
   const params = new URLSearchParams(window.location.search);
   const phaseName = params.get('phase');
   const exerciseId = params.get('exercise');
+  
   if (exerciseId) {
     renderExerciseDetail(exerciseId);
   } else if (phaseName) {
@@ -63,5 +132,5 @@ document.addEventListener('DOMContentLoaded', () => {
   const script = document.createElement('script');
   script.src = API_URL;
   document.body.appendChild(script);
-  script.onerror = () => { console.error('Failed to load sessions data.'); };
+  script.onerror = () => { console.error('Failed to load the master script from the server.'); };
 });
