@@ -36,6 +36,7 @@ function renderExerciseList(phaseName) {
   exerciseDetailView.style.display = 'none';
 }
 
+// --- THIS IS THE FULL, CORRECTED DETAIL FUNCTION ---
 function renderExerciseDetail(exerciseId) {
   const exerciseListView = document.getElementById('exercise-list-view');
   const exerciseDetailView = document.getElementById('exercise-detail-view');
