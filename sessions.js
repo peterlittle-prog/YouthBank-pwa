@@ -22,6 +22,7 @@ function renderExerciseList(phaseName) {
       </div>
     `;
   });
+   }
   exerciseListView.innerHTML = html;
   exerciseListView.style.display = 'block';
   exerciseDetailView.style.display = 'none';
