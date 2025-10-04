@@ -42,6 +42,7 @@ function renderExerciseDetail(exerciseId) {
 }
 
 function displaySessions(data) {
+   console.log(data);
   if (data && data.error) { /* ... error handling ... */ }
   allSessions = data;
   const params = new URLSearchParams(window.location.search);
