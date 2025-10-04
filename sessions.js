@@ -10,6 +10,8 @@ function renderExerciseList(phaseName) {
     return session.PHASE && session.PHASE.toLowerCase() === phaseName.toLowerCase();
   });
 
+  // --- THIS IS THE FIX ---
+  // The closing </a> tag has been added to the "Back" link.
   let html = `<h2>${phaseName}</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>`;
   
   if (sessionsInPhase.length === 0) {
@@ -36,7 +38,6 @@ function renderExerciseList(phaseName) {
   exerciseDetailView.style.display = 'none';
 }
 
-// --- THIS IS THE FULL, CORRECTED DETAIL FUNCTION ---
 function renderExerciseDetail(exerciseId) {
   const exerciseListView = document.getElementById('exercise-list-view');
   const exerciseDetailView = document.getElementById('exercise-detail-view');
