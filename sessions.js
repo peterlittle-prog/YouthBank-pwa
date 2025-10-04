@@ -5,7 +5,8 @@ let allSessions = [];
 function renderExerciseList(phaseName) {
   const exerciseListView = document.getElementById('exercise-list-view');
   const exerciseDetailView = document.getElementById('exercise-detail-view');
-  const sessionsInPhase = allSessions.filter(session => session.PHASE === phaseName);
+   const sessionsInPhase = allSessions.filter(session => {
+    return session.PHASE && session.PHASE.toLowerCase() === phaseName.toLowerCase();
   let html = `<h2>${phaseName}</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>`;
   sessionsInPhase.forEach(session => {
     const title = session.Exercise || 'No Title';
