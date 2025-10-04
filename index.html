@@ -227,10 +227,13 @@
                     <ul class="space-y-3 text-gray-200">${stepsHtml}</ul>
                     <div class="mt-8 pt-6 border-t border-gray-500/50 text-center">
                        // ... inside the contentArea.innerHTML template ...
-<a href="sessions.html?phase=${encodeURIComponent(phase.title)}" class="...">
-    Find out more about ${phase.title}
-</a>
-// ...
+                    // ... inside the contentArea.innerHTML template ...
+                    <a href="${phaseLink}" 
+                       class="inline-block text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 shadow-md"
+                       style="background-color: #52c5ce;">  <!-- ADD THIS LINE -->
+                        Find out more about ${phase.title}
+                    </a>
+                    // ...
                     </div>
                 </div>
             `;
