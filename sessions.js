@@ -153,14 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const script = document.createElement('script');
   
-  // The data URL still includes the callback
-  const dataUrl = "YOUR_LATEST_APPS_SCRIPT_URL?callback=displaySessions";
+  // The data URL is now built from the single API_URL constant
+  const dataUrl = `${API_URL}?callback=displaySessions`;
   script.src = dataUrl;
   
   script.onerror = () => {
-    // --- THIS IS THE NEW LOGIN PROMPT ---
-    // The login URL does NOT include the callback
-    const loginUrl = "YOUR_LATEST_APPS_SCRIPT_URL";
+    // The login URL is just the base API_URL constant
+    const loginUrl = API_URL; 
     
     sessionList.innerHTML = `
       <div class="login-prompt">
@@ -174,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.body.appendChild(script);
 });
+
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
