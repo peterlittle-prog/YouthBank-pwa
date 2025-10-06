@@ -28,6 +28,7 @@ body {
     color: inherit;
     background-size: cover;
     background-position: center;
+    word-wrap: break-word;
 }
 
 .card:hover {
@@ -88,6 +89,7 @@ body {
     padding: 2em;
     line-height: 1.6;
     background-color: rgba(255, 255, 255, 0); /* Body is transparent */
+    word-wrap: break-word;
 }
 
 .detail-body h3 {
