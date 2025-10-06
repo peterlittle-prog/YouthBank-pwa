@@ -6,24 +6,13 @@ body {
     margin: 0;
     padding: 1em;
 }
+/* ... (all other general styles) ... */
 
-h1, h2, h3 {
-    font-weight: 600;
-}
-
-a {
-    color: #007bff;
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
-}
-
-/* Add this to your style.css */
+/* --- Back Button Spacing --- */
 .detail-card > a, 
 #exercise-list-view > a {
-    display: block; /* Make it a block to apply margin */
-    margin-bottom: 1.5em; /* Add space below the link */
+    display: block;
+    margin-bottom: 1.5em;
 }
 
 /* --- Card Styling (for the list of exercises) --- */
@@ -36,7 +25,6 @@ a:hover {
     margin-bottom: 1em;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-    text-decoration: none;
     color: inherit;
     background-size: cover;
     background-position: center;
@@ -45,7 +33,6 @@ a:hover {
 .card:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     transform: translateY(-4px);
-    text-decoration: none;
 }
 
 .card h3 {
@@ -53,20 +40,15 @@ a:hover {
     color: #005a9c;
 }
 
-.card {
-    height: 1.2em;
-    vertical-align: middle;
-    margin-right: 0.5em;
-    margin-bottom: 0.2em;
-}
-
-/* Add this to your style.css */
 .card-icon {
     height: 1.2em;
     vertical-align: middle;
     margin-right: 0.5em;
     margin-bottom: 0.2em;
 }
+
+/* --- Detail Page Styling --- */
+/* ... (all the detail page styles from our previous steps go here) ... */
 /* --- Detail Page Styling --- */
 .detail-card {
     background-color: white;
