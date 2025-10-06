@@ -148,40 +148,30 @@ function displaySessions(data) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const script = document.createElement('script');
-  script.src = API_URL;
-  
-  // --- THIS IS THE NEW, SMARTER ERROR HANDLING ---
-  // This function is called on FAILURE (e.g., if the user is not logged in)
-  script.onerror = () => {
-    // Find a place to display the error. It could be the exercise list or the detail view.
-    const container = document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
-    
-    if (container) {
-      // Create the user-friendly sign-in prompt
-      container.innerHTML = `
-        <div class="login-prompt">
-          <h2>Access Denied</h2>
-          <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
-          <a href="${API_URL}" class="login-button">Sign in with Google</a>
-          <p class="small-text">After signing in, please return to this tab and refresh the page.</p>
-        </div>
-      `;
-      // Make sure the container is visible and hide the other one
-      container.style.display = 'block';
-      if (container.id === 'exercise-list-view') {
-        document.getElementById('exercise-detail-view').style.display = 'none';
-      } else {
-        document.getElementById('exercise-list-view').style.display = 'none';
-      }
+  const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
+  sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-    } else {
-      // Fallback if no container is found on the page
-      document.body.innerHTML = '<h1>Access Denied. Please sign in.</h1>';
-    }
+  const script = document.createElement('script');
+  
+  // The data URL still includes the callback
+  const dataUrl = "YOUR_LATEST_APPS_SCRIPT_URL?callback=displaySessions";
+  script.src = dataUrl;
+  
+  script.onerror = () => {
+    // --- THIS IS THE NEW LOGIN PROMPT ---
+    // The login URL does NOT include the callback
+    const loginUrl = "YOUR_LATEST_APPS_SCRIPT_URL";
+    
+    sessionList.innerHTML = `
+      <div class="login-prompt">
+        <h2>Access Denied</h2>
+        <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
+        <a href="${loginUrl}" class="login-button">Sign in with Google</a>
+        <p class="small-text">You will be redirected back to the app after signing in.</p>
+      </div>
+    `;
   };
   
-  // This line starts the data request
   document.body.appendChild(script);
 });
 
