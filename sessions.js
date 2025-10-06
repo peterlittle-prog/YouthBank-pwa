@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="login-prompt">
           <h2>Access Denied</h2>
           <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
-          <a href="${API_URL}" target="_blank" class="login-button">Sign in with Google</a>
+          <a href="${API_URL}" class="login-button">Sign in with Google</a>
           <p class="small-text">After signing in, please return to this tab and refresh the page.</p>
         </div>
       `;
