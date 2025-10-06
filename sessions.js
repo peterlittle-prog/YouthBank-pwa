@@ -20,6 +20,9 @@ function renderExerciseList(phaseName) {
     sessionsInPhase.forEach(session => {
       const title = session.Exercise || 'No Title';
       const rationale = session.Rationale || 'Not provided.';
+      const challenge = session['The Challenge'] || 'Not provided.';
+      const time = session.Time || 'Not specified';
+      const materials = session.Materials || 'Not specified.';
       const exerciseId = session['Exercise number'];
       const iconUrl = session['Step IC'];
       const bgImage = session['Phase BG'];
@@ -29,12 +32,13 @@ function renderExerciseList(phaseName) {
       const backgroundStyle = bgImage ? `style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${bgImage});"` : '';
 
       html += `
-        <div class="card-link" ${backgroundStyle}>
-          <a href="sessions.html?exercise=${exerciseId}">
-            <h3>${iconHtml}${title}</h3>
-            <p>${rationale.substring(0, 150)}...</p>
-            <p><em>Click to see more details</em></p>
-          </a>
+       <div class="card" ${backgroundStyle}>
+          <h3>${iconHtml}<a href="sessions.html?exercise=${exerciseId}">${title}</a></h3>
+          <p><strong>Challenge:</strong> ${challenge.substring(0, 100)}...</p>
+          <hr>
+          <p><strong>Time:</strong> ${time} minutes</p>
+          <p><strong>Materials:</strong> ${materials.substring(0, 100)}...</p>
+          <a href="sessions.html?exercise=${exerciseId}" style="display:block; margin-top:1em;"><em>Click to see more details</em></a>
         </div>
       `;
     });
@@ -60,7 +64,9 @@ function renderExerciseDetail(exerciseId) {
   
   const title = session.Exercise || 'No Title';
   const rationale = session.Rationale || 'Not provided.';
-  const time = session.Time || 'Not specified';
+  const desiredOutcome = session['Desired outcome'] || '';
+  const debrief = session.Debrief || '';
+  const alternate = session.Alternate || '';  const time = session.Time || 'Not specified';
   const materials = session.Materials || 'Not specified.';
   const challenge = session['The Challenge'] || 'Not provided.';
   const preparation = session.Preparation || '';
@@ -90,28 +96,31 @@ function renderExerciseDetail(exerciseId) {
   const backgroundStyle = bgImage ? `style="background-image: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url(${bgImage});"` : '';
 
   let html = `
-    <div class="detail-card" ${backgroundStyle}>
-      <a href="sessions.html?phase=${encodeURIComponent(phaseName)}">&laquo; Back to ${phaseName}</a>
-      <div class="detail-header">
-        <h2>${iconHtml}${title}</h2>
-      </div>
-      <div class="detail-body">
-        <p><strong>Time:</strong> ${time} minutes</p>
-        <p><strong>Materials:</strong> ${materials}</p>
-        <hr>
-        <h3>Rationale</h3>
-        <p>${rationale}</p>
-        <h3>The Challenge</h3>
-        <p>${challenge}</p>
-        <h3>Preparation</h3>
-        <p>${preparation.replace(/\n/g, '<br>')}</p>
-        <h3>What to do</h3>
-        <p>${whatToDo.replace(/\n/g, '<br>')}</p>
-        ${resourcesHtml}
-        ${infoSheetsHtml}
-        ${templatesHtml}
-      </div>
+   <div class="detail-card" ${backgroundStyle}>
+    <a href="sessions.html?phase=${encodeURIComponent(phaseName)}">&laquo; Back to ${phaseName}</a>
+    <div class="detail-header">
+      <h2>${iconHtml}${title}</h2>
     </div>
+    <div class="detail-body">
+      <p><strong>Time:</strong> ${time} minutes</p>
+      <p><strong>Materials:</strong> ${materials}</p>
+      <hr>
+      <h3>Rationale</h3>
+      <p>${rationale}</p>
+      <h3>The Challenge</h3>
+      <p>${challenge}</p>
+      ${desiredOutcome ? `<h3>Desired outcome</h3><p>${desiredOutcome}</p>` : ''}
+      <h3>Preparation</h3>
+      <p>${preparation.replace(/\n/g, '<br>')}</p>
+      <h3>What to do</h3>
+      <p>${whatToDo.replace(/\n/g, '<br>')}</p>
+      ${debrief ? `<h3>Debrief</h3><p>${debrief.replace(/\n/g, '<br>')}</p>` : ''}
+      ${alternate ? `<h3>Alternate</h3><p>${alternate.replace(/\n/g, '<br>')}</p>` : ''}
+      ${resourcesHtml}
+      ${infoSheetsHtml}
+      ${templatesHtml}
+    </div>
+  </div>
   `;
   
   exerciseDetailView.innerHTML = html;
@@ -146,3 +155,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(script);
   script.onerror = () => { console.error('Failed to load the master script from the server.'); };
 });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/YouthBank-pwa/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+  });
+}
