@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Successful</title>
+    <link rel="stylesheet" href="/YouthBank-pwa/style.css">
+    <style>
+        .auth-container {
+            text-align: center;
+            padding: 4em 1em;
+            margin: 2em auto;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Login Successful!</h2>
+        <p>Please wait while we load the YouthBank Session Planner...</p>
+    </div>
+    <script>
+        // After a short delay, redirect to the main application homepage
+        setTimeout(() => {
+            window.location.href = "/YouthBank-pwa/";
+        }, 2000); // 2-second delay
+    </script>
+</body>
+</html>
