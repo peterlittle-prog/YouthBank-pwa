@@ -31,7 +31,7 @@ function renderExerciseList(phaseName) {
       html += `
         <div class="card" ${backgroundStyle}>
           <h3>${iconHtml}<a href="sessions.html?exercise=${exerciseId}">${title}</a></h3>
-          <p><em>${rationale.substring(0, 150)}...</em></p>
+          <p><em>${rationale.substring(0, 250)}...</em></p>
           <hr>
           <p><strong>Challenge:</strong> ${challenge.substring(0, 100)}...</p>
           <p><strong>Time:</strong> ${time} minutes</p>
