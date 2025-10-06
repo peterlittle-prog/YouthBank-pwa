@@ -18,6 +18,7 @@ function renderExerciseList(phaseName) {
     sessionsInPhase.forEach(session => {
       const title = session.Exercise || 'No Title';
       const challenge = session['The Challenge'] || 'Not provided.';
+      const rationale = session.Rationale || 'Not provided.';
       const time = session.Time || 'Not specified';
       const materials = session.Materials || 'Not specified.';
       const exerciseId = session['Exercise number'];
@@ -30,11 +31,12 @@ function renderExerciseList(phaseName) {
       html += `
         <div class="card" ${backgroundStyle}>
           <h3>${iconHtml}<a href="sessions.html?exercise=${exerciseId}">${title}</a></h3>
-          <p><strong>Challenge:</strong> ${challenge.substring(0, 100)}...</p>
+          <p><em>${rationale.substring(0, 150)}...</em></p>
           <hr>
+          <p><strong>Challenge:</strong> ${challenge.substring(0, 100)}...</p>
           <p><strong>Time:</strong> ${time} minutes</p>
           <p><strong>Materials:</strong> ${materials.substring(0, 100)}...</p>
-          <a href="sessions.html?exercise=${exerciseId}" style="display:block; margin-top:1em;"><em>Click to see more details</em></a>
+          <a href="sessions.html?exercise=${exerciseId}" style="display:block; margin-top:1em;"><strong>Click to see more details</strong></a>
         </div>
       `;
     });
