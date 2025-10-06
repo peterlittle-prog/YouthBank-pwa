@@ -19,6 +19,13 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Add this to your style.css */
+.detail-card > a, 
+#exercise-list-view > a {
+    display: block; /* Make it a block to apply margin */
+    margin-bottom: 1.5em; /* Add space below the link */
+}
+
 /* --- Card Styling (for the list of exercises) --- */
 .card-link {
     display: block;
@@ -35,24 +42,31 @@ a:hover {
     background-position: center;
 }
 
-.card-link:hover {
+.card:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     transform: translateY(-4px);
     text-decoration: none;
 }
 
-.card-link h3 {
+.card h3 {
     margin-top: 0;
     color: #005a9c;
 }
 
-.card-icon {
+.card {
     height: 1.2em;
     vertical-align: middle;
     margin-right: 0.5em;
     margin-bottom: 0.2em;
 }
 
+/* Add this to your style.css */
+.card-icon {
+    height: 1.2em;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    margin-bottom: 0.2em;
+}
 /* --- Detail Page Styling --- */
 .detail-card {
     background-color: white;
