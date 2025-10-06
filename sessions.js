@@ -10,8 +10,6 @@ function renderExerciseList(phaseName) {
     return session.PHASE && session.PHASE.toLowerCase() === phaseName.toLowerCase();
   });
 
-  // --- THIS IS THE FIX ---
-  // The closing </a> tag has been added to the "Back" link.
   let html = `<h2>${phaseName}</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>`;
   
   if (sessionsInPhase.length === 0) {
@@ -19,7 +17,6 @@ function renderExerciseList(phaseName) {
   } else {
     sessionsInPhase.forEach(session => {
       const title = session.Exercise || 'No Title';
-      const rationale = session.Rationale || 'Not provided.';
       const challenge = session['The Challenge'] || 'Not provided.';
       const time = session.Time || 'Not specified';
       const materials = session.Materials || 'Not specified.';
@@ -28,11 +25,10 @@ function renderExerciseList(phaseName) {
       const bgImage = session['Phase BG'];
 
       const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="Icon" class="card-icon">` : '';
-      // Use a semi-transparent overlay on the background for readability
       const backgroundStyle = bgImage ? `style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${bgImage});"` : '';
 
       html += `
-       <div class="card" ${backgroundStyle}>
+        <div class="card" ${backgroundStyle}>
           <h3>${iconHtml}<a href="sessions.html?exercise=${exerciseId}">${title}</a></h3>
           <p><strong>Challenge:</strong> ${challenge.substring(0, 100)}...</p>
           <hr>
