@@ -25,16 +25,15 @@ function renderExerciseList(phaseName) {
       const iconUrl = session['Step IC'];
       const bgImage = session['Phase BG'];
 
-      // This line is now correct and will use the .card-icon style
       const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="Icon" class="card-icon">` : '';
       const backgroundStyle = bgImage ? `style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${bgImage});"` : '';
 
-      // --- THIS IS THE FIX ---
-      // The .substring() calls have been removed from Challenge and Materials
+      // --- THIS IS THE FINAL FIX ---
+      // All .substring() calls have been removed to show the full text.
       html += `
         <div class="card" ${backgroundStyle}>
           <h3>${iconHtml}<a href="sessions.html?exercise=${exerciseId}">${title}</a></h3>
-          <p><em>${rationale.substring(0, 150)}...</em></p>
+          <p><em>${rationale}</em></p>
           <hr>
           <p><strong>Challenge:</strong> ${challenge}</p>
           <p><strong>Time:</strong> ${time} minutes</p>
@@ -44,6 +43,11 @@ function renderExerciseList(phaseName) {
       `;
     });
   }
+
+  exerciseListView.innerHTML = html;
+  exerciseListView.style.display = 'block';
+  exerciseDetailView.style.display = 'none';
+}
 
   exerciseListView.innerHTML = html;
   exerciseListView.style.display = 'block';
