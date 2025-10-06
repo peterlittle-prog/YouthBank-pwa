@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec?";
+const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec";
 
 let allSessions = [];
 
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const script = document.createElement('script');
   
-  // The data URL is now built from the single API_URL constant
+  // The data URL is built from the single API_URL constant
   const dataUrl = `${API_URL}?callback=displaySessions`;
   script.src = dataUrl;
   
