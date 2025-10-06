@@ -1,7 +1,23 @@
 /* --- General Body & Layout --- */
-body { /* ... same as before ... */ }
-h1, h2, h3 { /* ... same as before ... */ }
-a { /* ... same as before ... */ }
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 1em;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
 
 /* --- Card Styling (for the list of exercises) --- */
 .card-link {
@@ -15,12 +31,21 @@ a { /* ... same as before ... */ }
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-decoration: none;
     color: inherit;
-    /* Added for background images */
     background-size: cover;
     background-position: center;
 }
-.card-link:hover { /* ... same as before ... */ }
-.card-link h3 { /* ... same as before ... */ }
+
+.card-link:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+    text-decoration: none;
+}
+
+.card-link h3 {
+    margin-top: 0;
+    color: #005a9c;
+}
+
 .card-icon {
     height: 1.2em;
     vertical-align: middle;
@@ -36,18 +61,41 @@ a { /* ... same as before ... */ }
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     overflow: hidden;
     margin-top: 2em;
-    /* Added for background images */
     background-size: cover;
     background-position: center;
 }
 
-/* The header is now just for padding and the bottom border */
 .detail-header {
     padding: 2em;
     border-bottom: 1px solid #e0e0e0;
-    /* Background is removed from here and applied to the parent .detail-card */
+    background-color: rgba(255, 255, 255, 0); /* Header is transparent */
 }
-.detail-header h2 { /* ... same as before ... */ }
-.detail-icon { /* ... same as before ... */ }
-.detail-body { /* ... same as before ... */ }
-/* ... etc ... */
+
+.detail-header h2 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+.detail-icon {
+    height: 1.2em;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    margin-bottom: 0.2em;
+}
+
+.detail-body {
+    padding: 2em;
+    line-height: 1.6;
+    background-color: rgba(255, 255, 255, 0); /* Body is transparent */
+}
+
+.detail-body h3 {
+    margin-top: 2em;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 0.5em;
+}
+
+.detail-body ul {
+    list-style-type: disc;
+    padding-left: 2em;
+}
