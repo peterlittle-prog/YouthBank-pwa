@@ -109,3 +109,36 @@ body {
     padding-bottom: 1.5em; /* Adds extra space below */
     border-bottom: 1px solid #e0e0e0; /* Adds a nice separator line */
 }
+
+/* --- Login Prompt Styling --- */
+.login-prompt {
+    text-align: center;
+    padding: 3em 1em;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 2em;
+}
+
+.login-button {
+    display: inline-block;
+    background-color: #4285F4; /* Google Blue */
+    color: white;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 0.8em 1.5em;
+    border-radius: 4px;
+    text-decoration: none;
+    margin: 1em 0;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #357ae8;
+    text-decoration: none;
+}
+
+.small-text {
+    font-size: 0.9em;
+    color: #666;
+}
