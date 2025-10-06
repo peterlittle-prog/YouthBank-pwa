@@ -1,58 +1,44 @@
-const CACHE_NAME = 'youthbank-sessions-v2'; // Note: I incremented the version number
-const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1Qszh5eT6ixw6kQ5TmfR7QCiT3_NA304KQIBz06R40Pq_I3aJn/exec";
+const CACHE_NAME = 'youthbank-pwa-v3'; // Incremented version to force an update
 const urlsToCache = [
   '/YouthBank-pwa/',
   '/YouthBank-pwa/index.html',
+  '/YouthBank-pwa/sessions.html',
+  '/YouthBank-pwa/sessions.js',
   '/YouthBank-pwa/style.css',
-  '/YouthBank-pwa/app.js',
   '/YouthBank-pwa/manifest.json',
-  API_URL // This one is already a full URL, so it's fine
+  '/YouthBank-pwa/icon-192.png' // Add your logo to the cache!
 ];
 
-// Install the service worker and cache assets
+// Install the service worker and cache the app shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache and caching assets');
+        console.log('Opened cache and caching app shell');
         return cache.addAll(urlsToCache);
       })
   );
 });
 
-// Intercept fetch requests
+// Serve cached content when offline, and update cache when online
 self.addEventListener('fetch', event => {
+  // We only want to cache GET requests for our app files
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response from cache
-        if (response) {
-          return response;
-        }
-
-        // Not in cache - fetch from network, then cache it for next time
-        return fetch(event.request).then(
-          networkResponse => {
-            // Check if we received a valid response
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic' && networkResponse.type !== 'cors') {
-              return networkResponse;
-            }
-
-            // IMPORTANT: Clone the response. A response is a stream
-            // and because we want the browser to consume the response
-            // as well as the cache consuming the response, we need to clone it
-            // so we have two streams.
-            const responseToCache = networkResponse.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return networkResponse;
-          }
-        );
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.match(event.request).then(response => {
+        // Return from cache if available
+        const fetchPromise = fetch(event.request).then(networkResponse => {
+          // Update the cache with the new version
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+        return response || fetchPromise;
+      });
+    })
   );
 });
 
