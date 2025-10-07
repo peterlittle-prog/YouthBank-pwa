@@ -147,14 +147,15 @@ function displaySessions(data) {
   }
 }
 
+document.addEventListener('DOMContentLoaded', ...)` block** at the bottom of the file with this final version.
+
+```javascript
 document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
   const script = document.createElement('script');
   
-  // --- THIS IS THE FIX ---
-  // 1. We set up the error handler FIRST.
   script.onerror = () => {
     const loginUrl = API_URL; 
     
@@ -162,19 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="login-prompt">
         <h2>Access Denied</h2>
         <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
-        <a href="${loginUrl}" class="login-button">Sign in with Google</a>
-        <p class="small-text">You will be redirected back to the app after signing in.</p>
+        <a href="${loginUrl}" target="_blank" class="login-button">Sign in with Google</a>
+        <p class="small-text">A new tab will open for you to sign in. After signing in, please close that tab and refresh this page.</p>
       </div>
     `;
   };
   
-  // 2. We set the source URL SECOND.
   script.src = `${API_URL}?callback=displaySessions`;
-  
-  // 3. We add it to the page LAST, which starts the download.
   document.body.appendChild(script);
 });
-
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
