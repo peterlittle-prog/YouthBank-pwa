@@ -1,4 +1,4 @@
-const CACHE_NAME = 'youthbank-pwa-v2'; // A new version name to force an update
+const CACHE_NAME = 'youthbank-pwa-v3'; // A new version name to force an update
 const urlsToCache = [
   '/YouthBank-pwa/',
   '/YouthBank-pwa/index.html',
