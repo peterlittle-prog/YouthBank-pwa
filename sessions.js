@@ -29,17 +29,18 @@ function renderExerciseList(phaseName) {
       const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="Icon" class="card-icon">` : '';
       const backgroundStyle = bgImage ? `style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${bgImage});"` : '';
 
-      html += `
-        <div class="card" ${backgroundStyle}>
-          <h3>${iconHtml}<a href="sessions.html?exercise=${exerciseId}">${title}</a></h3>
-          <p><em>${rationale}</em></p>
-          <hr>
-          <p><strong>Challenge:</strong> ${challenge}</p>
-          <p><strong>Time:</strong> ${time} minutes</p>
-          <p><strong>Materials:</strong> ${materials}</p>
-          <a href="sessions.html?exercise=${exerciseId}" style="display:block; margin-top:1em;"><strong>Click to see more details</strong></a>
-        </div>
-      `;
+    html += `
+  <a href="sessions.html?exercise=${exerciseId}" class="card-link-wrapper">
+    <div class="card" ${backgroundStyle}>
+      <h3>${iconHtml}${title}</h3>
+      <p><em>${rationale}</em></p>
+      <hr>
+      <p><strong>Challenge:</strong> ${challenge}</p>
+      <p><strong>Time:</strong> ${time} minutes</p>
+      <p><strong>Materials:</strong> ${materials}</p>
+    </div>
+  </a>
+`;
     });
   }
 
