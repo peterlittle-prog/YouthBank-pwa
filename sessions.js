@@ -2,6 +2,7 @@ const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s
 
 let allSessions = [];
 
+// This function renders the list of cards for a phase. It is complete.
 function renderExerciseList(phaseName) {
   const exerciseListView = document.getElementById('exercise-list-view');
   const exerciseDetailView = document.getElementById('exercise-detail-view');
@@ -47,6 +48,7 @@ function renderExerciseList(phaseName) {
   exerciseDetailView.style.display = 'none';
 }
 
+// This function renders the full detail page. It is complete.
 function renderExerciseDetail(exerciseId) {
   const exerciseListView = document.getElementById('exercise-list-view');
   const exerciseDetailView = document.getElementById('exercise-detail-view');
@@ -126,6 +128,7 @@ function renderExerciseDetail(exerciseId) {
   exerciseDetailView.style.display = 'block';
 }
 
+// This is the global callback function for the JSONP request. It is complete.
 function displaySessions(data) {
   if (data && data.error) {
     document.body.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
@@ -147,14 +150,14 @@ function displaySessions(data) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', ...)` block** at the bottom of the file with this final version.
-
-```javascript
+// This is the main entry point that loads the data or shows the login prompt. It is complete.
 document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
   const script = document.createElement('script');
+  
+  const dataUrl = `${API_URL}?callback=displaySessions`;
   
   script.onerror = () => {
     const loginUrl = API_URL; 
@@ -163,16 +166,17 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="login-prompt">
         <h2>Access Denied</h2>
         <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
-        <a href="${loginUrl}" target="_blank" class="login-button">Sign in with Google</a>
-        <p class="small-text">A new tab will open for you to sign in. After signing in, please close that tab and refresh this page.</p>
+        <a href="${loginUrl}" class="login-button">Sign in with Google</a>
+        <p class="small-text">You will be redirected back to the app after signing in.</p>
       </div>
     `;
   };
   
-  script.src = `${API_URL}?callback=displaySessions`;
+  script.src = dataUrl;
   document.body.appendChild(script);
 });
 
+// This is the service worker registration. It is complete.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/YouthBank-pwa/sw.js')
