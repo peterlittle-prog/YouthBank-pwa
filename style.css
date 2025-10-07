@@ -142,3 +142,10 @@ body {
     font-size: 0.9em;
     color: #666;
 }
+
+/* --- Wrapper for clickable cards --- */
+.card-link-wrapper {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
