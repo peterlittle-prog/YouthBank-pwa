@@ -157,8 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const script = document.createElement('script');
   
-  const dataUrl = `${API_URL}?callback=displaySessions`;
-  
   script.onerror = () => {
     const loginUrl = API_URL; 
     
@@ -166,13 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="login-prompt">
         <h2>Access Denied</h2>
         <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
-        <a href="${loginUrl}" class="login-button">Sign in with Google</a>
-        <p class="small-text">You will be redirected back to the app after signing in.</p>
+        <a href="${loginUrl}" target="_blank" class="login-button">Sign in with Google</a>
+        <p class="small-text">A new tab will open for you to sign in. After signing in, please close that tab and refresh this page.</p>
       </div>
     `;
   };
   
-  script.src = dataUrl;
+  script.src = `${API_URL}?callback=displaySessions`;
   document.body.appendChild(script);
 });
 
