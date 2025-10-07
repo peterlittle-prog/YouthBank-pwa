@@ -220,23 +220,23 @@ const phasesData = [
                 </li>
             `).join('');
 
-             const phaseLink = `sessions.html?phase=${encodeURIComponent(phase.title)}`;
+            const phaseLink = `sessions.html?phase=${encodeURIComponent(phase.title)}`;
 
-            contentArea.innerHTML = `
-                <div class="fade-in">
-                    <h2 class="text-3xl font-bold mb-2" style="color: ${phase.color};">${phase.title}</h2>
-                    <p class="text-gray-300 mb-6">${phase.description}</p>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Steps in this Phase:</h3>
-                    <ul class="space-y-3 text-gray-200">${stepsHtml}</ul>
-                    <div class="mt-8 pt-6 border-t border-gray-500/50 text-center">
-                    <a href="${phaseLink}" 
-                       class="inline-block text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 shadow-md"
-                       style="background-color: #52c5ce;">  <!-- ADD THIS LINE -->
-                        Find out more about ${phase.title}
-                    </a>
+                contentArea.innerHTML = `
+                  <a href="${phaseLink}" class="phase-content-link">
+                    <div class="fade-in">
+                        <h2 class="text-3xl font-bold mb-2" style="color: ${phase.color};">${phase.title}</h2>
+                        <p class="text-gray-300 mb-6">${phase.description}</p>
+                        <h3 class="text-xl font-semibold mb-4 text-white">Steps in this Phase:</h3>
+                        <ul class="space-y-3 text-gray-200">${stepsHtml}</ul>
+                        <div class="mt-8 pt-6 border-t border-gray-500/50 text-center">
+                            <span class="inline-block bg-[#52c5ce] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#47a8b3] transition-colors duration-300 shadow-md">
+                                Find out more about ${phase.title}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            `;
+                  </a>
+                `;
 
             // Update active state on dots
             document.querySelectorAll('.phase-dot').forEach(d => {
