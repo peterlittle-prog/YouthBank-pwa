@@ -153,12 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const script = document.createElement('script');
   
-  // The data URL is built from the single API_URL constant
-  const dataUrl = `${API_URL}?callback=displaySessions`;
-  script.src = dataUrl;
-  
+  // --- THIS IS THE FIX ---
+  // 1. We set up the error handler FIRST.
   script.onerror = () => {
-    // The login URL is just the base API_URL constant
     const loginUrl = API_URL; 
     
     sessionList.innerHTML = `
@@ -171,6 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   };
   
+  // 2. We set the source URL SECOND.
+  script.src = `${API_URL}?callback=displaySessions`;
+  
+  // 3. We add it to the page LAST, which starts the download.
   document.body.appendChild(script);
 });
 
