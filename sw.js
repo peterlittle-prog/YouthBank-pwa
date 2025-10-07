@@ -1,4 +1,4 @@
-const CACHE_NAME = 'youthbank-pwa-v3'; // Incremented version to force an update
+const CACHE_NAME = 'youthbank-pwa-v2'; // A new version name to force an update
 const urlsToCache = [
   '/YouthBank-pwa/',
   '/YouthBank-pwa/index.html',
@@ -6,10 +6,9 @@ const urlsToCache = [
   '/YouthBank-pwa/sessions.js',
   '/YouthBank-pwa/style.css',
   '/YouthBank-pwa/manifest.json',
-  '/YouthBank-pwa/icon-192.png' // Add your logo to the cache!
+  '/YouthBank-pwa/icon-192.png'
 ];
 
-// Install the service worker and cache the app shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -20,29 +19,31 @@ self.addEventListener('install', event => {
   );
 });
 
-// Serve cached content when offline, and update cache when online
 self.addEventListener('fetch', event => {
-  // We only want to cache GET requests for our app files
-  if (event.request.method !== 'GET') {
+  const requestUrl = new URL(event.request.url);
+
+  // --- THIS IS THE FIX ---
+  // If the request is for our Google Apps Script,
+  // bypass the cache and go directly to the network.
+  if (requestUrl.origin === 'https://script.google.com') {
+    event.respondWith(fetch(event.request));
     return;
   }
 
+  // For all other requests, use the cache-first strategy.
   event.respondWith(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.match(event.request).then(response => {
-        // Return from cache if available
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-          // Update the cache with the new version
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        });
-        return response || fetchPromise;
-      });
-    })
+    caches.match(event.request)
+      .then(response => {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      }
+    )
   );
 });
 
-// Clean up old caches
 self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
