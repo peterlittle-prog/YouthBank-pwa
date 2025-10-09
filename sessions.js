@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/a/macros/youthbankinternational.org/s/AKfycbw7yrHpVKHY3R2jX1QszH5eT6ixW6kQ5TmrR7pQCiT3_NA304KQIbz06R4oPq_I3aJn/exec";
+const API_URL = "https://get-yb-learning-999854663085.europe-west2.run.app";
 
 let allSessions = [];
 
@@ -151,28 +151,28 @@ function displaySessions(data) {
   }
 }
 
-// This is the main entry point that loads the data or shows the login prompt. It is complete.
+// --- THIS IS THE OTHER MAJOR CHANGE ---
+// We are now using the modern 'fetch' method instead of the JSONP script tag.
 document.addEventListener('DOMContentLoaded', () => {
   const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
   sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-  const script = document.createElement('script');
-  
-  script.onerror = () => {
-    const loginUrl = API_URL; 
-    
-    sessionList.innerHTML = `
-      <div class="login-prompt">
-        <h2>Access Denied</h2>
-        <p>Please sign in with your YouthBank International Google account to view the session plans.</p>
-        <a href="${loginUrl}" target="_blank" class="login-button">Sign in with Google</a>
-        <p class="small-text">A new tab will open for you to sign in. After signing in, please close that tab and refresh this page.</p>
-      </div>
-    `;
-  };
-  
-  script.src = `${API_URL}?callback=displaySessions`;
-  document.body.appendChild(script);
+  fetch(API_URL)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // If successful, call our existing display function
+      displaySessions(data);
+    })
+    .catch(error => {
+      console.error('Error fetching session data:', error);
+      // For now, we'll show a simple error. In Phase 2, we will add the Firebase login prompt here.
+      sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please try refreshing the page.</p>`;
+    });
 });
 
 // This is the service worker registration. It is complete.
