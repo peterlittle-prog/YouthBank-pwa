@@ -154,41 +154,22 @@ function displaySessions(data) {
 // --- THIS IS THE OTHER MAJOR CHANGE ---
 // We are now using the modern 'fetch' method instead of the JSONP script tag.
 document.addEventListener('DOMContentLoaded', () => {
-    const auth = firebase.auth();
-    const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view');
+  const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view');
+  sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-    // Listen for authentication state changes
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            // User is signed in. Get their token and fetch the data.
-            sessionList.innerHTML = '<p>Loading sessions...</p>';
-            user.getIdToken().then(idToken => {
-                fetch(API_URL, {
-                    headers: {
-                        'Authorization': `Bearer ${idToken}`
-                    }
-                })
-                .then(response => {
-                    if (response.status === 401) {
-                       // Handle case where token is valid but user is not approved yet
-                       sessionList.innerHTML = '<p>Your account is pending approval by an administrator.</p>';
-                       return;
-                    }
-                    if (!response.ok) { throw new Error('Network response was not ok'); }
-                    return response.json();
-                })
-                .then(data => {
-                    if(data) displaySessions(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    sessionList.innerHTML = '<p>Failed to load sessions.</p>';
-                });
-            });
-        } else {
-            // User is signed out. Redirect to the login page.
-            window.location.href = '/YouthBank-pwa/login.html';
-        }
+  fetch(API_URL)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      displaySessions(data);
+    })
+    .catch(error => {
+      console.error('Error fetching session data:', error);
+      sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please try refreshing the page.</p>`;
     });
 });
 
