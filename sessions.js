@@ -151,26 +151,56 @@ function displaySessions(data) {
   }
 }
 
-// --- THIS IS THE OTHER MAJOR CHANGE ---
-// We are now using the modern 'fetch' method instead of the JSONP script tag.
-document.addEventListener('DOMContentLoaded', () => {
-  const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view');
-  sessionList.innerHTML = '<p>Loading sessions...</p>';
+// This new function handles fetching the data AFTER a user is confirmed to be logged in.
+async function fetchData(user) {
+    const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
+    sessionList.innerHTML = '<p>Loading sessions...</p>';
 
-  fetch(API_URL)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      displaySessions(data);
-    })
-    .catch(error => {
-      console.error('Error fetching session data:', error);
-      sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please try refreshing the page.</p>`;
-    });
+    try {
+        // Get the user's secret ID Token
+        const idToken = await user.getIdToken();
+
+        // Make the fetch request, now with the Authorization header
+        const response = await fetch(API_URL, {
+            headers: {
+                'Authorization': `Bearer ${idToken}`
+            }
+        });
+
+        if (response.status === 403) {
+            // This will happen if the user's account is not yet approved in Airtable
+            sessionList.innerHTML = '<h2>Pending Approval</h2><p>Your account has been created but is waiting for an administrator to approve it. Please check back later.</p>';
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        displaySessions(data);
+
+    } catch (error) {
+        console.error('Error fetching session data:', error);
+        sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please try refreshing the page.</p>`;
+    }
+}
+
+// --- THIS IS THE NEW ENTRY POINT FOR THE APP ---
+// It replaces the old DOMContentLoaded listener.
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        // User is signed in. Let's fetch the data.
+        console.log("User is signed in, fetching data...");
+        fetchData(user);
+    } else {
+        // User is signed out. Redirect to the login page.
+        console.log("User is not signed in, redirecting to login.");
+        // We check to make sure we aren't already on the login page to avoid an infinite loop.
+        if (!window.location.pathname.endsWith('login.html')) {
+            window.location.href = 'login.html';
+        }
+    }
 });
 
 // This is the service worker registration. It is complete.
