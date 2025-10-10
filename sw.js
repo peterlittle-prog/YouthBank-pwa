@@ -1,12 +1,12 @@
 const CACHE_NAME = 'youthbank-pwa-v3'; // A new version name to force an update
 const urlsToCache = [
-  '/YouthBank-pwa/',
-  '/YouthBank-pwa/index.html',
-  '/YouthBank-pwa/sessions.html',
-  '/YouthBank-pwa/sessions.js',
-  '/YouthBank-pwa/style.css',
-  '/YouthBank-pwa/manifest.json',
-  '/YouthBank-pwa/icon-192.png'
+  './',
+  './index.html',
+  './sessions.html',
+  './sessions.js',
+  './style.css',
+  './manifest.json',
+  './icon-192.png'
 ];
 
 self.addEventListener('install', event => {

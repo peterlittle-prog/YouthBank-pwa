@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         auth.createUserWithEmailAndPassword(email, password)
             .then(userCredential => {
                 alert('Account created! Please wait for an administrator to approve your account.');
-                window.location.href = '/YouthBank-pwa/'; // Redirect to homepage
+                window.location.href = 'index.html'; // Redirect to homepage
             })
             .catch(error => {
                 document.getElementById('error-message').innerText = error.message;
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('signin-password').value;
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
-                window.location.href = '/YouthBank-pwa/'; // Redirect to homepage on success
+                window.location.href = 'index.html'; // Redirect to homepage on success
             })
             .catch(error => {
                 document.getElementById('error-message').innerText = error.message;
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithPopup(provider)
             .then(result => {
-                window.location.href = '/YouthBank-pwa/'; // Redirect to homepage on success
+                window.location.href = 'index.html'; // Redirect to homepage on success
             })
             .catch(error => {
                 document.getElementById('error-message').innerText = error.message;

@@ -1,7 +1,7 @@
 {
   "name": "YouthBank Learning",
   "short_name": "YouthBank",
-  "description": "An interactive guide to the YouthBank grant-making process and session plans.",   "start_url": "/YouthBank-pwa/index.html",
+  "description": "An interactive guide to the YouthBank grant-making process and session plans.",   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#323232",
   "theme_color": "#323232",
@@ -9,13 +9,13 @@
   
  "icons": [
     {
-      "src": "/YouthBank-pwa/icon-192.png",
+      "src": "icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "/YouthBank-pwa/icon-512.png",
+      "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"

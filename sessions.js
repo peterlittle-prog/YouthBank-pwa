@@ -11,7 +11,7 @@ function renderExerciseList(phaseName) {
     return session.PHASE && session.PHASE.toLowerCase() === phaseName.toLowerCase();
   });
 
-  let html = `<h2>${phaseName}</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>`;
+  let html = `<h2>${phaseName}</h2><a href="index.html">&laquo; Back to YouthBank Cycle</a>`;
   
   if (sessionsInPhase.length === 0) {
     html += '<p>No exercises found for this phase. Please check the data in the Google Sheet.</p>';
@@ -57,7 +57,7 @@ function renderExerciseDetail(exerciseId) {
   const session = allSessions.find(s => s['Exercise number'] === exerciseId);
   
   if (!session) {
-    exerciseDetailView.innerHTML = '<h2>Exercise not found</h2><a href="/YouthBank-pwa/">&laquo; Back to YouthBank Cycle</a>';
+    exerciseDetailView.innerHTML = '<h2>Exercise not found</h2><a href="index.html">&laquo; Back to YouthBank Cycle</a>';
     exerciseListView.style.display = 'none';
     exerciseDetailView.style.display = 'block';
     return;
@@ -147,7 +147,7 @@ function displaySessions(data) {
   } else if (phaseName) {
     renderExerciseList(phaseName);
   } else {
-    window.location.href = '/YouthBank-pwa/';
+    window.location.href = 'index.html';
   }
 }
 
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // This is the service worker registration. It is complete.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/YouthBank-pwa/sw.js')
+    navigator.serviceWorker.register('sw.js')
       .then(registration => {
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
       })
