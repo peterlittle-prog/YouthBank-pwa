@@ -5,17 +5,8 @@
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
   
-  <!-- Your Firebase config -->
-  <script src="firebase-config.js"></script>
-  
-  <script>
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-  </script>
+
 </head>
 <body>
   <div id="header">
@@ -24,5 +15,6 @@
   <div id="exercise-list-view"></div>
   <div id="exercise-detail-view"></div>
   <script src="sessions.js"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>

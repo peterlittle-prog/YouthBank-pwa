@@ -1,41 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Sign In - YouthBank</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - YouthBank Learning Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+
+   
 </head>
 <body>
-  <div id="header"><h1>YouthBank Session Plans</h1></div>
-  <div id="login-container">
-    <!-- Sign In Form -->
-    <div id="sign-in-form">
-      <h2>Sign In</h2>
-      <input type="email" id="signin-email" placeholder="Email">
-      <input type="password" id="signin-password" placeholder="Password">
-      <button id="signin-button">Sign In</button>
-      <hr>
-      <button id="google-signin-button" class="google-button">Sign in with Google</button>
-      <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+    <div id="header">
+        <h1>YouthBank Session Plans</h1>
+    </div>
+
+    <div id="login-container">
+        <!-- Sign In Form -->
+        <div id="sign-in-form">
+            <h2>Sign In</h2>
+            <input type="email" id="signin-email" placeholder="Email" autocomplete="email">
+            <input type="password" id="signin-password" placeholder="Password" autocomplete="current-password">
+            <button id="signin-button">Sign In</button>
+            <hr style="margin: 1.5em 0;">
+            <button id="google-signin-button" class="google-button">Sign in with Google</button>
+            <p style="text-align: center; margin-top: 1em;">Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+        </div>
+        
+        <!-- Sign Up Form (hidden by default) -->
+        <div id="sign-up-form" style="display:none;">
+            <h2>Create Account</h2>
+            <input type="email" id="signup-email" placeholder="Email" autocomplete="email">
+            <input type="password" id="signup-password" placeholder="New Password" autocomplete="new-password">
+            <button id="signup-button">Create Account</button>
+            <p style="text-align: center; margin-top: 1em;">Already have an account? <a href="#" id="show-signin">Sign In</a></p>
+        </div>
+        <p id="error-message" style="color:red; text-align: center; margin-top: 1em;"></p>
     </div>
     
-    <!-- Sign Up Form (hidden by default) -->
-    <div id="sign-up-form" style="display:none;">
-      <h2>Create Account</h2>
-      <input type="email" id="signup-email" placeholder="Email">
-      <input type="password" id="signup-password" placeholder="Password">
-      <button id="signup-button">Create Account</button>
-      <p>Already have an account? <a href="#" id="show-signin">Sign In</a></p>
-    </div>
-    <p id="error-message" style="color:red;"></p>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script>firebase.initializeApp(firebaseConfig);</script>
-  
-  <!-- Login Logic -->
-  <script src="auth.js"></script>
+    <!-- Login Logic -->
+    <script src="auth.js"></script>
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+{
+  "name": "youthbank-pwa",
+  "version": "1.0.0",
+  "main": "auth-guard.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterlittle-prog/YouthBank-pwa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/peterlittle-prog/YouthBank-pwa/issues"
+  },
+  "homepage": "https://github.com/peterlittle-prog/YouthBank-pwa#readme",
+  "description": "",
+  "devDependencies": {
+    "vite": "^7.1.9"
+  },
+  "dependencies": {
+    "firebase": "^12.4.0"
+  }
+}
