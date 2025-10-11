@@ -176,3 +176,90 @@ function renderExerciseDetail(exerciseId) {
   exerciseListView.style.display = 'none';
   exerciseDetailView.style.display = 'block';
 }
+
+// This is the global callback function for the JSONP request. It is complete.
+function displaySessions(data) {
+  if (data && data.error) {
+    document.body.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
+    return;
+  }
+  
+  allSessions = data;
+  
+  const params = new URLSearchParams(window.location.search);
+  const phaseName = params.get('phase');
+  const exerciseId = params.get('exercise');
+  
+  if (exerciseId) {
+    renderExerciseDetail(exerciseId);
+  } else if (phaseName) {
+    renderExerciseList(phaseName);
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+// This new function handles fetching the data AFTER a user is confirmed to be logged in.
+async function fetchData(user) {
+    const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
+    sessionList.innerHTML = '<p>Loading sessions...</p>';
+
+    try {
+        // Get the user's secret ID Token
+        const idToken = await user.getIdToken();
+
+        // Make the fetch request, now with the Authorization header
+        const response = await fetch(API_URL, {
+            headers: {
+                'Authorization': `Bearer ${idToken}`
+            }
+        });
+
+        if (response.status === 403) {
+            // This will happen if the user's account is not yet approved in Airtable
+            sessionList.innerHTML = '<h2>Pending Approval</h2><p>Your account has been created but is waiting for an administrator to approve it. Please check back later.</p>';
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        displaySessions(data);
+
+    } catch (error) {
+        console.error('Error fetching session data:', error);
+        sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please try refreshing the page.</p>`;
+    }
+}
+
+// --- THIS IS THE NEW ENTRY POINT FOR THE APP ---
+// It replaces the old DOMContentLoaded listener.
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        // User is signed in. Let's fetch the data.
+        console.log("User is signed in, fetching data...");
+        fetchData(user);
+    } else {
+        // User is signed out. Redirect to the login page.
+        console.log("User is not signed in, redirecting to login.");
+        // We check to make sure we aren't already on the login page to avoid an infinite loop.
+        if (!window.location.pathname.endsWith('login.html')) {
+            window.location.href = 'login.html';
+        }
+    }
+});
+
+// This is the service worker registration. It is complete.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+  });
+}
