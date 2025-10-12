@@ -1,19 +1,20 @@
 import { getAuth, getIdToken } from "firebase/auth";
 
 const API_URL = "https://get-yb-learning-999854663085.europe-west2.run.app";
-const auth = getAuth();
-const user = auth.currentUser;
+
 
 let allSessions = [];
 
-// --- This is the new, simplified entry point for THIS file ---
-// It runs because main.js imports it after confirming a user is logged in.
-if (user) {
-    fetchData(user);
-} else {
-    // This is a fallback error. In theory, the auth guard in main.js should prevent this from ever running.
-    console.error("sessions.js was loaded, but no user is signed in. Auth guard may have failed.");
-    document.body.innerHTML = '<h1>Authentication Error: User not found.</h1>';
+// This is the main entry point. It is ONLY called by main.js AFTER Firebase is initialized.
+export function initSessionsPage(user) {
+    const auth = getAuth(); // Get auth service here
+    const currentUser = auth.currentUser; // Get the current user here
+
+    if (currentUser) {
+        fetchData(currentUser);
+    } else {
+        console.error("initSessionsPage called, but no user is signed in.");
+    }
 }
 
 async function fetchData(user) {
@@ -21,10 +22,15 @@ async function fetchData(user) {
     sessionList.innerHTML = '<p>Loading sessions...</p>';
 
     try {
-        const idToken = await getIdToken(user); // Use the imported function
+        const idToken = await getIdToken(user);
         const response = await fetch(API_URL, {
             headers: { 'Authorization': `Bearer ${idToken}` }
         });
+
+        if (response.status === 403) {
+            sessionList.innerHTML = '<h2>Pending Approval</h2><p>Your account has been created but is waiting for an administrator to approve it. Please check back later.</p>';
+            return;
+        }
 
         if (!response.ok) { throw new Error(`Network response was not ok: ${response.statusText}`); }
         const data = await response.json();
@@ -47,7 +53,6 @@ function displaySessions(data) {
   } else if (phaseName) {
     renderExerciseList(phaseName);
   } else {
-    // This case should ideally not be reached if coming from index.html
     window.location.href = 'index.html';
   }
 }
@@ -78,18 +83,20 @@ function renderExerciseList(phaseName) {
       const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="Icon" class="card-icon">` : '';
       const backgroundStyle = bgImage ? `style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${bgImage});"` : '';
 
+     // ... inside renderExerciseList's forEach loop ...
+
       html += `
-  <a href="sessions.html?exercise=${exerciseId}" class="card-link-wrapper">
-    <div class="card" ${backgroundStyle}>
-      <h3>${iconHtml}${title}</h3>
-      <p><em>${rationale}</em></p>
-      <hr>
-      <p><strong>Challenge:</strong> ${challenge}</p>
-      <p><strong>Time:</strong> ${time} minutes</p>
-      <p><strong>Materials:</strong> ${materials}</p>
-    </div>
-  </a>
-`;
+        <a href="sessions.html?exercise=${exerciseId}" class="card-link-wrapper">
+          <div class="card" ${backgroundStyle}>
+            <h3>${iconHtml}${title}</h3>
+            <p><em>${rationale}</em></p>
+            <hr>
+            <p><strong>Challenge:</strong> ${challenge}</p>
+            <p><strong>Time:</strong> ${time} minutes</p>
+            <p><strong>Materials:</strong> ${materials}</p>
+          </div>
+        </a>
+      `;
     });
   }
 
@@ -177,89 +184,4 @@ function renderExerciseDetail(exerciseId) {
   exerciseDetailView.style.display = 'block';
 }
 
-// This is the global callback function for the JSONP request. It is complete.
-function displaySessions(data) {
-  if (data && data.error) {
-    document.body.innerHTML = `<p><strong>Error from server:</strong> ${data.error}</p>`;
-    return;
-  }
-  
-  allSessions = data;
-  
-  const params = new URLSearchParams(window.location.search);
-  const phaseName = params.get('phase');
-  const exerciseId = params.get('exercise');
-  
-  if (exerciseId) {
-    renderExerciseDetail(exerciseId);
-  } else if (phaseName) {
-    renderExerciseList(phaseName);
-  } else {
-    window.location.href = 'index.html';
-  }
-}
-
-// This new function handles fetching the data AFTER a user is confirmed to be logged in.
-async function fetchData(user) {
-    const sessionList = document.getElementById('session-list') || document.getElementById('exercise-list-view') || document.getElementById('exercise-detail-view');
-    sessionList.innerHTML = '<p>Loading sessions...</p>';
-
-    try {
-        // Get the user's secret ID Token
-        const idToken = await user.getIdToken();
-
-        // Make the fetch request, now with the Authorization header
-        const response = await fetch(API_URL, {
-            headers: {
-                'Authorization': `Bearer ${idToken}`
-            }
-        });
-
-        if (response.status === 403) {
-            // This will happen if the user's account is not yet approved in Airtable
-            sessionList.innerHTML = '<h2>Pending Approval</h2><p>Your account has been created but is waiting for an administrator to approve it. Please check back later.</p>';
-            return;
-        }
-
-        if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        displaySessions(data);
-
-    } catch (error) {
-        console.error('Error fetching session data:', error);
-        sessionList.innerHTML = `<p><strong>Failed to load sessions.</strong> Please try refreshing the page.</p>`;
-    }
-}
-
-// --- THIS IS THE NEW ENTRY POINT FOR THE APP ---
-// It replaces the old DOMContentLoaded listener.
-firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-        // User is signed in. Let's fetch the data.
-        console.log("User is signed in, fetching data...");
-        fetchData(user);
-    } else {
-        // User is signed out. Redirect to the login page.
-        console.log("User is not signed in, redirecting to login.");
-        // We check to make sure we aren't already on the login page to avoid an infinite loop.
-        if (!window.location.pathname.endsWith('login.html')) {
-            window.location.href = 'login.html';
-        }
-    }
-});
-
-// This is the service worker registration. It is complete.
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      })
-      .catch(err => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
-  });
-}
+// The service worker registration is now handled by main.js, so it is removed from here.
