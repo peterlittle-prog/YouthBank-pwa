@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - YouthBank Learning Platform</title>
+    <link rel="manifest" href="/YouthBank-pwa/assets/manifest-DbIWss9X.json">
+    <link rel="icon" type="image/png" href="/YouthBank-pwa/assets/icon-192-CxgElczT.png">
+  <script type="module" crossorigin src="/YouthBank-pwa/assets/main-BL8HeXu7.js"></script>
+  <link rel="stylesheet" crossorigin href="/YouthBank-pwa/assets/main-DzEmtq_u.css">
+</head>
+
+<body>
+    <div id="header">
+        <h1>YouthBank Session Plans</h1>
+    </div>
+
+    <div id="login-container">
+        <!-- Sign In Form -->
+        <div id="sign-in-form">
+            <h2>Sign In</h2>
+            <input type="email" id="signin-email" placeholder="Email" autocomplete="email">
+            <input type="password" id="signin-password" placeholder="Password" autocomplete="current-password">
+            <button id="signin-button">Sign In</button>
+            <hr style="margin: 1.5em 0;">
+            <button id="google-signin-button" class="google-button">Sign in with Google</button>
+            <p style="text-align: center; margin-top: 1em;">Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+        </div>
+        
+        <!-- Sign Up Form (hidden by default) -->
+        <div id="sign-up-form" style="display:none;">
+            <h2>Create Account</h2>
+            <input type="email" id="signup-email" placeholder="Email" autocomplete="email">
+            <input type="password" id="signup-password" placeholder="New Password" autocomplete="new-password">
+            <button id="signup-button">Create Account</button>
+            <p style="text-align: center; margin-top: 1em;">Already have an account? <a href="#" id="show-signin">Sign In</a></p>
+        </div>
+        <p id="error-message" style="color:red; text-align: center; margin-top: 1em;"></p>
+    </div>
+    
+</body>
+</html>
