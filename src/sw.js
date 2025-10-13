@@ -1,12 +1,21 @@
-const CACHE_NAME = 'youthbank-pwa-v3'; // A new version name to force an update
+// We are using a new cache name to ensure the browser fetches the new version
+const CACHE_NAME = 'youthbank-pwa-v5'; 
+
+// --- THIS IS THE FIX ---
+// These are the correct, absolute paths for the files in your final deployed site.
 const urlsToCache = [
-  './',
-  './index.html',
-  './sessions.html',
-  './sessions.js',
-  './style.css',
-  './manifest.json',
-  './icon-192.png'
+  '/YouthBank-pwa/',
+  '/YouthBank-pwa/index.html',
+  '/YouthBank-pwa/sessions.html',
+  '/YouthBank-pwa/login.html',
+  '/YouthBank-pwa/auth.html',
+  // Vite will generate the JS and CSS files with unique hashes,
+  // so we cannot cache them by name here. The service worker will
+  // cache them dynamically during the 'fetch' event.
+  // We will cache the main icons and manifest.
+  '/YouthBank-pwa/manifest.json',
+  '/YouthBank-pwa/icon-192.png',
+  '/YouthBank-pwa/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -20,17 +29,6 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  const requestUrl = new URL(event.request.url);
-
-  // --- THIS IS THE FIX ---
-  // If the request is for our Google Apps Script,
-  // bypass the cache and go directly to the network.
-  if (requestUrl.origin === 'https://script.google.com') {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-
-  // For all other requests, use the cache-first strategy.
   event.respondWith(
     caches.match(event.request)
       .then(response => {
@@ -38,12 +36,30 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+
+        // Not in cache, fetch from network, then cache it for next time
+        return fetch(event.request).then(
+          networkResponse => {
+            // Check if we received a valid response
+            if (!networkResponse || networkResponse.status !== 200) {
+              return networkResponse;
+            }
+
+            // Clone the response and cache it
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return networkResponse;
+          }
+        );
+      })
   );
 });
 
+// Clean up old caches
 self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
