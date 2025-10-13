@@ -1,8 +1,8 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 
-// This is the main entry point. It is ONLY called by main.js on the login page.
+// This is the main entry point for this module, exported for main.js to use
 export function initAuthPage() {
-    const auth = getAuth(); // Get auth service here
+    const auth = getAuth();
     const errorMessage = document.getElementById('error-message');
 
     // --- UI Toggles ---
@@ -40,5 +40,23 @@ export function initAuthPage() {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .catch(error => { errorMessage.innerText = error.message; });
+    });
+
+    // --- THIS IS THE NEW PASSWORD RESET LOGIC ---
+    document.getElementById('forgot-password-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signin-email').value;
+        if (!email) {
+            alert('Please enter your email address in the email field first.');
+            return;
+        }
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert('Password reset email sent! Please check your inbox.');
+            })
+            .catch((error) => {
+                errorMessage.innerText = error.message;
+            });
     });
 }
