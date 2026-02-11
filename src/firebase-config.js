@@ -1,12 +1,11 @@
-// This file has ONE job: to define and export your project's unique configuration.
-// It does NOT initialize Firebase. That is the job of main.js.
+
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyBMgcOU5vHUEgs5T-0tieQjwHOMKvIRkc4",
-  authDomain: "youthbank-learning-platform.firebaseapp.com",
-  projectId: "youthbank-learning-platform",
-  storageBucket: "youthbank-learning-platform.firebasestorage.app",
-  messagingSenderId: "999854663085",
-  appId: "1:999854663085:web:71584e6731c159fe26ed24",
-  measurementId: "G-1TXTJYKD8W"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
