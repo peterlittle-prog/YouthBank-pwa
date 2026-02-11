@@ -12,10 +12,12 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: 'index.html',
+        main: 'index.html',     // Now the Dashboard
+        cycle: 'cycle.html',    // Renamed from index
         sessions: 'sessions.html',
         login: 'login.html',
         auth: 'auth.html',
+        triad: 'triad.html'     // The new Triad page
       },
     },
   },

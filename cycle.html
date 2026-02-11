@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The YouthBank Cycle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+</head>
+
+<body class="bg-[#323232] text-[#f2f2f2]">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">The YouthBank Cycle</h1>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto">An interactive guide to the grant-making process. Click on a phase to explore the steps involved.</p>
+        </header>
+
+        <div class="flex flex-col lg:flex-row gap-8 items-center">
+
+            <!-- Interactive SVG Diagram -->
+            <div class="w-full lg:w-1/2 flex justify-center items-center p-4">
+                <svg id="youthbank-cycle" viewBox="0 0 600 600" class="w-full max-w-md">
+                    <!-- Logo Shape -->
+                    <circle cx="300" cy="300" r="200" fill="none" stroke="#f2f2f2" stroke-width="15"/>
+                    <circle id="inner-circle" cx="300" cy="300" r="133" fill="#f2f2f2"/>
+                    
+                    <!-- Central text display for hover -->
+                    <g id="central-text-container"></g>
+
+                    <!-- Phase Dots and Labels -->
+                    <!-- These will be populated by JavaScript -->
+                </svg>
+            </div>
+
+            <!-- Content Display Area -->
+            <div id="content-area" class="w-full lg:w-1/2 p-6 bg-[#3a3a3a] rounded-xl shadow-2xl lg:h-[520px] overflow-y-auto">
+                <!-- Initial instruction text -->
+                <div id="initial-message" class="flex flex-col items-center justify-center h-full text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#52c5ce] mb-4"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <h2 class="text-2xl font-bold mb-2">Explore the 5 Phases</h2>
+                    <p class="text-gray-300 max-w-sm mx-auto">A YouthBank Cycle is made up of 5 distinct phases. Hover over a numbered dot to see its title, and click on it to explore its purpose and the specific steps involved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+const phasesData = [
+            {
+                id: 1,
+                title: "Me, you and our place",
+                color: "#52c5ce",
+                description: "This is Phase 1 of the YouthBank Cycle. It consists of 2 Steps which involve YouthBank members beginning to think about who they are and what their roles could be in their communities.",
+                steps: [
+                    "Building your YouthBank Team: Become part of a team that is committed to making a positive difference.",
+                    "Understanding Context: Take a fresh look at what happens in a specific community and identify opportunities for improvement."
+                ]
+            },
+            {
+                id: 2,
+                title: "Values, Challenges, Change",
+                color: "#d75532",
+                description: "This is Phase 2 of the YouthBank Cycle. It consists of 3 Steps which involves YouthBank members thinking about values, rights, power and who has it. Deciding what needs to change and how to achieve it!",
+                steps: [
+                    "Living the golden rules: Ensuring the proposed changes are fair for all.",
+                    "Power - who has it?: Understanding the dynamic of power within the local community. Identifying how it can be utilised to create change.",
+                    "Our agenda for change: Be clear about what you want to change and why."
+                ]
+            },
+            {
+                id: 3,
+                title: "Resourcing and skilling up for change",
+                color: "#32935b",
+                description: "This is Phase 3 of the YouthBank Cycle. It consists of 3 Steps which involves YouthBank members generating ideas, sharing their agenda for change and establishing their fund.",
+                steps: [
+                    "Generating Ideas: Creating solutions for change.",
+                    "Sharing your agenda: Getting people on board with your ideas for change.",
+                    "Establishing your funds: Locating and building resources."
+                ]
+            },
+            {
+                id: 4,
+                title: "The Grant-making process",
+                color: "#de885a",
+                description: "This is Phase 4 of the YouthBank Cycle. It consists of 6 Steps which involves YouthBank members calling for applications, creating fair processes, deciding what to fund and contracting with groups to create change.",
+                steps: [
+                    "Call for applications: Generating responses from young people in the community to create change.",
+                    "Shortlisting: Deciding what is in and what's out.",
+                    "Interviewing and report writing: Asking great questions and report the facts.",
+                    "Decision making: Considering all the options to make good decisions.",
+                    "Monitoring template: Collecting the data for assessment purposes.",
+                    "Contracting: Setting the ground rules, expectations and responsibilities for all."
+                ]
+            },
+            {
+                id: 5,
+                title: "Making sense, impact, so what?",
+                color: "#c4b39a",
+                description: "This is Phase 5 of the YouthBank Cycle. It consists of 4 Steps which involves YouthBank members recording what they did, understanding what changed and celebrating their success.",
+                steps: [
+                    "Recording what happened: Telling the story.",
+                    "Accounting for the money: Budgeting 101.",
+                    "Deciding what has changed: Exploring the impact of the projects to create change in the community.",
+                    "Capturing lessons and celebrating success: Celebrating and sharing the stories of change."
+                ]
+            }
+        ];
+        
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svgContainer = document.getElementById('youthbank-cycle');
+        const contentArea = document.getElementById('content-area');
+        const initialMessage = document.getElementById('initial-message');
+        const centralTextContainer = document.getElementById('central-text-container');
+
+        // --- DYNAMIC POSITION CALCULATION ---
+        const svgCenter = 300;
+        const dotRadius = 200;
+        const labelRadius = 250; // Position labels outside the main circle
+        const numPhases = phasesData.length;
+        const angleStep = 360 / numPhases;
+        const startAngle = -90; // Start at the top of the circle
+
+        phasesData.forEach((phase, i) => {
+            const angleDeg = startAngle + i * angleStep;
+            const angleRad = angleDeg * (Math.PI / 180);
+
+            // Calculate dot position on the circle
+            phase.position = {
+                cx: svgCenter + dotRadius * Math.cos(angleRad),
+                cy: svgCenter + dotRadius * Math.sin(angleRad)
+            };
+        });
+
+        // Function to create and append SVG elements
+        function createSVGElement(tag, attributes) {
+            const el = document.createElementNS(svgNS, tag);
+            for (let key in attributes) {
+                el.setAttribute(key, attributes[key]);
+            }
+            return el;
+        }
+
+        // Populate the SVG with dots and numbers
+        phasesData.forEach(phase => {
+            const group = createSVGElement('g', {});
+
+            const dot = createSVGElement('circle', {
+                'class': 'phase-dot',
+                'data-id': phase.id,
+                cx: phase.position.cx,
+                cy: phase.position.cy,
+                r: 25,
+                fill: phase.color
+            });
+
+            const number = createSVGElement('text', {
+                x: phase.position.cx,
+                y: phase.position.cy,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'central',
+                fill: '#323232',
+                'font-size': '24',
+                'font-weight': 'bold',
+                'pointer-events': 'none' // Make number non-interactive
+            });
+            number.textContent = phase.id;
+            
+            group.appendChild(dot);
+            group.appendChild(number);
+            svgContainer.appendChild(group);
+        });
+
+        // Function to display phase content
+        function displayPhaseContent(phaseId) {
+            const phase = phasesData.find(p => p.id == phaseId);
+            if (!phase) return;
+
+            // Hide initial message
+            if (initialMessage) {
+                initialMessage.style.display = 'none';
+            }
+
+            // Generate content HTML
+            let stepsHtml = phase.steps.map((step, index) => `
+                <li class="flex items-start">
+                    <span class="mr-3 mt-1 block h-5 w-5 flex-shrink-0 rounded-full bg-[${phase.color}] text-center text-xs font-bold leading-5 text-black">${index + 1}</span>
+                    <span>${step}</span>
+                </li>
+            `).join('');
+
+            const phaseLink = `sessions.html?phase=${encodeURIComponent(phase.title)}`;
+
+                contentArea.innerHTML = `
+                  <a href="${phaseLink}" class="phase-content-link">
+                    <div class="fade-in">
+                        <h2 class="text-3xl font-bold mb-2" style="color: ${phase.color};">${phase.title}</h2>
+                        <p class="text-gray-300 mb-6">${phase.description}</p>
+                        <h3 class="text-xl font-semibold mb-4 text-white">Steps in this Phase:</h3>
+                        <ul class="space-y-3 text-gray-200">${stepsHtml}</ul>
+                        <div class="mt-8 pt-6 border-t border-gray-500/50 text-center">
+                            <span class="inline-block bg-[#52c5ce] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#47a8b3] transition-colors duration-300 shadow-md">
+                                Find out more about ${phase.title}
+                            </span>
+                        </div>
+                    </div>
+                  </a>
+                `;
+
+            // Update active state on dots
+            document.querySelectorAll('.phase-dot').forEach(d => {
+                d.classList.remove('active');
+            });
+            document.querySelector(`.phase-dot[data-id="${phaseId}"]`).classList.add('active');
+        }
+
+        // Event listener for SVG clicks
+        svgContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('phase-dot')) {
+                const phaseId = event.target.getAttribute('data-id');
+                displayPhaseContent(phaseId);
+            }
+        });
+
+        // Event listeners for hover to show text in the center
+        svgContainer.addEventListener('mouseover', (event) => {
+            if (event.target.classList.contains('phase-dot')) {
+                const phaseId = event.target.getAttribute('data-id');
+                const phase = phasesData.find(p => p.id == phaseId);
+                if (phase) {
+                    centralTextContainer.innerHTML = ''; // Clear previous
+
+                    const foreignObject = createSVGElement('foreignObject', {
+                        x: 210, // Centering the 180-width object
+                        y: 210, // Centering the 180-height object
+                        width: 180,
+                        height: 180,
+                        'pointer-events': 'none'
+                    });
+
+                    // We need to create the div with the XHTML namespace to embed HTML in SVG
+                    const textDiv = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+                    textDiv.setAttribute('style', `
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        height: 100%;
+                        text-align: center;
+                        font-size: 24px;
+                        font-weight: bold;
+                        line-height: 1.2;
+                        color: ${phase.color};
+                        word-wrap: break-word;
+                    `);
+                    textDiv.textContent = phase.title;
+
+                    foreignObject.appendChild(textDiv);
+                    centralTextContainer.appendChild(foreignObject);
+                }
+            }
+        });
+
+        svgContainer.addEventListener('mouseout', (event) => {
+            if (event.target.classList.contains('phase-dot')) {
+                centralTextContainer.innerHTML = '';
+            }
+        });
+        
+        // Optional: Display the first phase by default on load
+        // displayPhaseContent(1);
+
+    </script>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      // This tells the browser to find the sw.js file we moved to the public folder
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered!'))
+        .catch(err => console.log('Service Worker failed:', err));
+    });
+  }
+</script>
+</body>
+</html>
+
+
+

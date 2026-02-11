@@ -7,6 +7,8 @@ const urlsToCache = [
   './',
   'index.html',
   'sessions.html',
+  'cycle.html',   // Add this
+  'triad.html',   // Add this
   'login.html',
   'auth.html',
   'manifest.json',
