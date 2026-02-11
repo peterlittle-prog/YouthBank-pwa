@@ -4,18 +4,14 @@ const CACHE_NAME = 'youthbank-pwa-v5';
 // --- THIS IS THE FIX ---
 // These are the correct, absolute paths for the files in your final deployed site.
 const urlsToCache = [
-  '/YouthBank-pwa/',
-  '/YouthBank-pwa/index.html',
-  '/YouthBank-pwa/sessions.html',
-  '/YouthBank-pwa/login.html',
-  '/YouthBank-pwa/auth.html',
-  // Vite will generate the JS and CSS files with unique hashes,
-  // so we cannot cache them by name here. The service worker will
-  // cache them dynamically during the 'fetch' event.
-  // We will cache the main icons and manifest.
-  '/YouthBank-pwa/manifest.json',
-  '/YouthBank-pwa/icon-192.png',
-  '/YouthBank-pwa/icon-512.png'
+  './',
+  'index.html',
+  'sessions.html',
+  'login.html',
+  'auth.html',
+  'manifest.json',
+  'icon-192.png',
+  'icon-512.png'
 ];
 
 self.addEventListener('install', event => {

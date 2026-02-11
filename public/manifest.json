@@ -1,13 +1,14 @@
 {
   "name": "YouthBank Learning",
   "short_name": "YouthBank",
-  "description": "An interactive guide to the YouthBank grant-making process and session plans.",   "start_url": "index.html",
+  "description": "An interactive guide to the YouthBank grant-making process.",
   "display": "standalone",
   "background_color": "#323232",
   "theme_color": "#323232",
   "orientation": "portrait-primary",
-  
- "icons": [
+  "start_url": "index.html",
+  "scope": ".",
+  "icons": [
     {
       "src": "icon-192.png",
       "type": "image/png",
@@ -20,5 +21,5 @@
       "sizes": "512x512",
       "purpose": "any maskable"
     }
- ]
+  ]
 }
